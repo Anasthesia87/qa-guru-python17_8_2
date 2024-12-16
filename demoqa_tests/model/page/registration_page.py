@@ -1,29 +1,12 @@
 import os
-from selene_in_action_py13.conditions import match
+
 from selene.support.shared import browser
+
+from demoqa_tests.model.user.user_data import User
+from selene_in_action_py13.conditions import match
 
 
 class RegistrationPage:
-    def __init__(self):
-        self.first_name = browser.element('#firstName')
-        self.last_name = browser.element('#lastName')
-        self.user_email = browser.element('#userEmail')
-        self.gender = browser.element('#genterWrapper')
-        self.user_number = browser.element('#userNumber')
-        self.date_of_birth = browser.element('#dateOfBirthInput')
-        self.month_of_birth = browser.element('.react-datepicker__month-select')
-        self.year_of_birth = browser.element('.react-datepicker__year-select')
-        self.day_of_birth = browser.element('.react-datepicker__day--020')
-        self.subjects = browser.element('#subjectsInput')
-        self.hobbies = browser.element('#hobbiesWrapper')
-        self.picture = browser.element('#uploadPicture')
-        self.current_address = browser.element('#currentAddress')
-        self.state = browser.element('#state')
-        self.city = browser.element('#city')
-        self.submit_button = browser.element('#submit')
-        self.close_button = browser.element('#closeLargeModal')
-
-
 
     def open(self):
         browser.open('/automation-practice-form')
@@ -31,90 +14,69 @@ class RegistrationPage:
         browser.driver.execute_script("$('#fixedban').remove()")
         browser.driver.execute_script("$('footer').remove()")
 
-    def type_first_name(self, value):
-        self.first_name.should(match.blank)
-        self.first_name.type(value)
+    def register(self, value: User):
+        browser.element('#firstName').should(match.blank).type('Lucy')
 
-    def type_last_name(self, value):
-        self.last_name.should(match.blank)
-        self.last_name.type(value)
+        browser.element('#lastName').should(match.blank).type('Bechtel')
 
-    def type_user_email(self, value):
-        self.user_email.should(match.blank)
-        self.user_email.type(value)
+        browser.element('#userEmail').should(match.blank).type('aslavret87@gmail.com')
 
-    def select_gender(self, value):
-        self.gender.element(value).click()
+        browser.element('[for=gender-radio-2]').click()
 
-    def type_user_number(self, value):
-        self.user_number.should(match.blank)
-        self.user_number.type(value)
+        browser.element('#userNumber').should(match.blank).type('0123456789')
 
-    def select_date_of_birth(self, month, year):
+        # ---------------
 
-        self.date_of_birth.click()
+        browser.element('#dateOfBirthInput').click()
 
-        self.month_of_birth.click()
-        self.month_of_birth.element(month).should(match.text('July')).click()
+        browser.element('.react-datepicker__month-select').click()
 
-        self.year_of_birth.click()
-        self.year_of_birth.element(year).should(match.text('2005')).click()
+        browser.element('.react-datepicker__month-select').element('[value = "6"]').should(match.text('July')).click()
 
-        self.day_of_birth.should(match.text('20')).click()
+        browser.element('.react-datepicker__year-select').click()
 
-    def type_subjects(self, value1, value2):
-        self.subjects.should(match.blank)
-        self.subjects.type(value1).press_enter()
-        self.subjects.type(value2).press_enter()
+        browser.element('.react-datepicker__year-select').element('[value = "2005"]').should(match.text('2005')).click()
 
-    def select_hobbies(self, value):
-        self.hobbies.element(value).click()
+        browser.element('.react-datepicker__day--020').should(match.text('20')).click()
 
-    def upload_picture(self, path):
-        self.picture.send_keys(os.path.abspath(path))
+        # ---------------
 
-    def type_current_address(self, value):
-        self.current_address.should(match.blank)
-        self.current_address.type(value)
+        browser.element('#subjectsInput').type('Arts').press_enter()
+        browser.element('#subjectsInput').type('En').press_enter()
 
-    def select_state(self, value):
-        self.state.click()
-        self.state.all('#state div').element_by(match.text(value)).click()
+        browser.element('[for=hobbies-checkbox-2]').click()
 
-    def select_city(self, value):
-        self.city.click()
-        self.city.all('#city div').element_by(match.text(value)).click()
+        # ---------------
 
-    def submit_button_click(self):
-        self.submit_button.click()
+        browser.element('#uploadPicture').send_keys(os.path.abspath('resources/original.jpg'))
 
-    def should_have_registered(self, text):
+        # ----------------
+
+        browser.element('#currentAddress').should(match.blank).type('426 Jordy Lodge Cartwrightshire, SC 88120-6700')
+
+        browser.element('#state').click()
+
+        browser.all('#state div').element_by(match.text('Haryana')).click()
+
+        browser.element('#city').click()
+
+        browser.all('#city div').element_by(match.text('Panipat')).click()
+
+        # ---------------
+
+        browser.element('#submit').click()
+
+    def should_have_registered(self, student: User):
         browser.element('#example-modal-sizes-title-lg').should(match.text('Thanks for submitting the form'))
-        browser.all('tbody tr').should(match.exact_texts(text))
-
-    def close_button_click(self):
-        self.close_button.click()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        browser.all('tbody tr').should(match.exact_texts([
+            'Student Name Lucy Bechtel',
+            'Student Email aslavret87@gmail.com',
+            'Gender Female',
+            'Mobile 0123456789',
+            'Date of Birth 20 July,2005',
+            'Subjects Arts, English',
+            'Hobbies Reading',
+            'Picture original.jpg',
+            'Address 426 Jordy Lodge Cartwrightshire, SC 88120-6700',
+            'State and City Haryana Panipat']))
+        browser.element('#closeLargeModal').click()
