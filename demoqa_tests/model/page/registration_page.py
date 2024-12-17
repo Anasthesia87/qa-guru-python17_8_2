@@ -1,7 +1,5 @@
-import os
-
 from selene.support.shared import browser
-
+from demoqa_tests.model.data_sources import resources
 from demoqa_tests.model.user.user_data import User
 from selene_in_action_py13.conditions import match
 
@@ -48,7 +46,7 @@ class RegistrationPage:
 
         # ---------------
 
-        browser.element('#uploadPicture').send_keys(os.path.abspath('resources/original.jpg'))
+        browser.element('#uploadPicture').set_value(resources.path(value.file))
 
         # ----------------
 
