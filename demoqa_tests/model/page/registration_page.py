@@ -3,8 +3,6 @@ from selene_in_action_py13.conditions import match
 from selene import browser
 
 
-
-
 class RegistrationPage:
     def __init__(self):
         self.first_name = browser.element('#firstName')
@@ -24,8 +22,6 @@ class RegistrationPage:
         self.city = browser.element('#city')
         self.submit_button = browser.element('#submit')
         self.close_button = browser.element('#closeLargeModal')
-
-
 
     def open(self):
         browser.open('/automation-practice-form')
@@ -53,7 +49,6 @@ class RegistrationPage:
         self.user_number.type(value)
 
     def select_date_of_birth(self, month, year):
-
         self.date_of_birth.click()
 
         self.month_of_birth.click()
@@ -96,27 +91,3 @@ class RegistrationPage:
 
     def close_button_click(self):
         self.close_button.click()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
