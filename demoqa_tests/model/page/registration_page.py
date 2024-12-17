@@ -1,6 +1,8 @@
-import os
+from demoqa_tests.model.data_sources import resources
 from selene_in_action_py13.conditions import match
-from selene.support.shared import browser
+from selene import browser
+
+
 
 
 class RegistrationPage:
@@ -70,8 +72,8 @@ class RegistrationPage:
     def select_hobbies(self, value):
         self.hobbies.element(value).click()
 
-    def upload_picture(self, path):
-        self.picture.send_keys(os.path.abspath(path))
+    def upload_picture(self, value):
+        self.picture.set_value(resources.path(value))
 
     def type_current_address(self, value):
         self.current_address.should(match.blank)

@@ -1,9 +1,5 @@
-import time
-import os
 from demoqa_tests.model.page.registration_page import RegistrationPage
-from selene_in_action_py13.conditions import match
-from selene import browser
-from selene.support.shared import browser
+
 
 def test_student_registration_form():
     registration_page = RegistrationPage()
@@ -33,7 +29,7 @@ def test_student_registration_form():
 
     # ---------------
 
-    registration_page.upload_picture('resources/original.jpg')
+    registration_page.upload_picture('original.jpg')
 
     # ----------------
 
